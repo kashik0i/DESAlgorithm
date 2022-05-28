@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 
 namespace DESAlgorithm
 {
@@ -183,6 +184,7 @@ namespace DESAlgorithm
         //    }
         //    return temp;
         //}
+        
         static void Main(string[] args)
         {
 
@@ -199,26 +201,104 @@ namespace DESAlgorithm
              * The 7th bit of M is the last bit of IP.
              * 
              */
-            //133457799BBCDFF1/5B5A57676A56676E/0123456789ABCDEF
-            ulong K = 0x675A69675E5A6B5A;
-            //0x675A69675E5A6B5A/0123456789ABCDEF
-            ulong M = 0x5B5A57676A56676E;
-            //ulong[] roundKeys = KeyGen(K);
-            //ulong C=Encrypt(roundKeys,M);
-            //Array.Reverse(roundKeys);
-            //ulong plain= Encrypt(roundKeys, C);
-            Console.WriteLine("Key:" + ToHex(K, 16, 4));
-            Console.WriteLine("Message:" + ToHex(M, 16, 4));
-            ulong[] roundKeys = MyDESAlgorithm.KeyGen(K);
-            ulong C = MyDESAlgorithm.Encrypt(roundKeys, M);
-            Console.WriteLine("Cifier:" + ToHex(C, 16, 4));
-            Array.Reverse(roundKeys);
-            ulong plain = MyDESAlgorithm.Encrypt(roundKeys, C);
-            Console.WriteLine("Plain:" + ToHex(plain,16,4));
+            //Convert to byte array
+
+            string msgString1 = "Hello there How are you? this is done by Amr. and the stupid test by Emma. here is some song lyrics Gimme, gimme, gimme some time to think I'm in the bathroom, looking at me Face in the mirror is all I need(ooh) Wait until the reaper takes my life Never gonna get me out alive I will live a thousand million lives(ooh)";
+            //string keyString = "1234";
+            byte[] msgBytes1 = Encoding.UTF8.GetBytes(msgString1);
+            //byte[] keyBytes = Encoding.ASCII.GetBytes(keyString);
+            var cifir1 = MyDESAlgorithm.EncryptString(msgBytes1, 0x12345678,false);
+            Console.WriteLine("Cifir String:" + Encoding.UTF8.GetString(cifir1));
+            var plain1 = MyDESAlgorithm.EncryptString(cifir1, 0x12345678, true);
+            Console.WriteLine("Plain String:" + Encoding.UTF8.GetString(plain1));
+            var output = Encoding.UTF8.GetString(plain1);
+            
+            Console.WriteLine("is working: "+MyDESAlgorithm.CheckAlgorithm(plain1,msgBytes1));
+            //string msgString = "I am from the future";
+            //string keyString = "1234";
+            //byte[] msgBytes = Encoding.ASCII.GetBytes(msgString);
+            //byte[] keyBytes = Encoding.ASCII.GetBytes(keyString);
+            //ulong[] Message = new ulong[(int)Math.Ceiling(((double)msgBytes.Length) / 8)];//= BitConverter.(msgBytes);
+            //Buffer.BlockCopy(msgBytes, 0, Message, 0, msgBytes.Length);
+            //ulong Key = BitConverter.ToUInt32(keyBytes);
+            ////133457799BBCDFF1/5B5A57676A56676E/0123456789ABCDEF/675A69675E5A6B5A
+            //ulong K = Key;
+            ////0x675A69675E5A6B5A/0123456789ABCDEF/5B5A57676A56676E
+            //Console.WriteLine("Key Hex:" + ToHex(K, 16, 4));
+            ////Console.WriteLine("Message Hex:" + ToHex(M, 16, 4));
+            //ulong[] encryptKeys = MyDESAlgorithm.KeyGen(K);
+            //ulong[] decryptKeys = new ulong[encryptKeys.Length];
+            //encryptKeys.CopyTo(decryptKeys, 0);
+            //Array.Reverse(decryptKeys);
+            //List<ulong> Cifir = new List<ulong>();
+            //foreach (ulong M in Message)
+            //{
+            //    if (M == 0)
+            //        break;
+            //    ulong C = MyDESAlgorithm.Encrypt(encryptKeys, M);
+            //    Cifir.Add(C);
+            //    Console.WriteLine("Cifier Hex:" + ToHex(C, 16, 4));
+            //}
+            ////ulong C = MyDESAlgorithm.Encrypt(encryptKeys, M);
+            ////Console.WriteLine("Cifier Hex:" + ToHex(C, 16, 4));
+            //ulong[] plain = new ulong[Cifir.Count];
+            //for (int i = 0; i < Cifir.Count; i++)
+            //{
+            //    ulong p = MyDESAlgorithm.Encrypt(decryptKeys, Cifir[i]);
+            //    plain[i] = p;
+            //    Console.WriteLine("Plain Hex:" + ToHex(p, 16, 4));
+            //    //Console.WriteLine("Plain String:" + Encoding.ASCII.GetString(BitConverter. p));
+            //}
+            ////ulong plain = MyDESAlgorithm.Encrypt(decryptKeys, C);
+            ////Console.WriteLine("Plain Hex:" + ToHex(plain,16,4));
+            //Byte[] plainMsgBytes = new Byte[8 * plain.Length];
+            //Buffer.BlockCopy(plain, 0, plainMsgBytes, 0, plainMsgBytes.Length);
+            ////Console.WriteLine("Plain String:" + Encoding.ASCII.GetString(plainMsgBytes));
 
 
         }
+        //public static Byte[] EncryptString(Byte[] msgBytes,uint K,bool decrypt)
+        //{
+        //    Console.WriteLine("Plain String:" + Encoding.ASCII.GetString(msgBytes));
+        //    ulong[] Message = new ulong[(int)Math.Ceiling(((double)msgBytes.Length) / 8)];
+        //    Buffer.BlockCopy(msgBytes, 0, Message, 0, msgBytes.Length);
+        //    ulong[] encryptKeys = MyDESAlgorithm.KeyGen(K);
+        //    List<ulong> other = new List<ulong>();
+        //    if(decrypt)
+        //        Array.Reverse(encryptKeys);
+        //    for (int i = 0; i < Message.Length; i++)
+        //    {
+        //        other.Add( MyDESAlgorithm.Encrypt(encryptKeys, Message[i]));
+        //        Console.WriteLine("Plain Hex:" + ToHex(other[i], 16, 4));
+        //    }
+        //    Byte[] returned = new Byte[8 * other.Count];
+        //    Buffer.BlockCopy(other.ToArray(), 0, returned, 0, returned.Length);
+        //    Console.WriteLine("Plain String:" + Encoding.ASCII.GetString(returned));
+        //    return returned;
+        //}
+        public static string ToHexString(string str)
+        {
+            var sb = new StringBuilder();
 
+            var bytes = Encoding.Unicode.GetBytes(str);
+            foreach (var t in bytes)
+            {
+                sb.Append(t.ToString("X2"));
+            }
+
+            return sb.ToString(); // returns: "48656C6C6F20776F726C64" for "Hello world"
+        }
+
+        public static string FromHexString(string hexString)
+        {
+            var bytes = new byte[hexString.Length / 2];
+            for (var i = 0; i < bytes.Length; i++)
+            {
+                bytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+            }
+
+            return Encoding.Unicode.GetString(bytes); // returns: "Hello world" for "48656C6C6F20776F726C64"
+        }
         public static ulong[] KeyGen(ulong K)
         {
 

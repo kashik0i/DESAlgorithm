@@ -147,6 +147,31 @@ namespace DESAlgorithm
             ulong plain = Encrypt(roundKeys, C);
 
         }
+        public static bool CheckAlgorithm(Byte[] generated, Byte[] original)
+        {
+            for (int i = 0; generated[i] != '\0'; i++)
+            {
+                if (generated[i] != original[i])
+                    return false;
+            }
+            return true;
+        }
+        public static Byte[] EncryptString(Byte[] msgBytes, uint K, bool decrypt)
+        {
+            ulong[] Message = new ulong[(int)Math.Ceiling(((double)msgBytes.Length) / 8)];
+            Buffer.BlockCopy(msgBytes, 0, Message, 0, msgBytes.Length);
+            ulong[] encryptKeys = MyDESAlgorithm.KeyGen(K);
+            List<ulong> other = new List<ulong>();
+            if (decrypt)
+                Array.Reverse(encryptKeys);
+            for (int i = 0; i < Message.Length; i++)
+            {
+                other.Add(MyDESAlgorithm.Encrypt(encryptKeys, Message[i]));
+            }
+            Byte[] returned = new Byte[8 * other.Count];
+            Buffer.BlockCopy(other.ToArray(), 0, returned, 0, returned.Length);
+            return returned;
+        }
         public static ulong[] KeyGen(ulong K)
         {
             ulong temp = 0;
